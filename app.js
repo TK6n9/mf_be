@@ -45,7 +45,10 @@ const server = http.createServer(app);
 // const server = https.createServer(options, app);
 
 const corsOptions = {
-  origin: "http://localhost:3000" || "https://tk-mindfulness.vercel.app",
+  origin:
+    "http://localhost:3000" ||
+    "https://mf-fe-git-main-tk6n9.vercel.app/" ||
+    "https://mf-fe.vercel.app/",
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
   // 쿠키 전송을 위해 필요
