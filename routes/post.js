@@ -6,6 +6,7 @@ const { isLoggedIn } = require("../middlewares");
 const { Post, User, Comment } = require("../models");
 const router = express.Router();
 
+const { sequelize } = require("../models/post");
 const upload = multer({
   storage: multer.diskStorage({
     destination(req, res, done) {
@@ -106,20 +107,52 @@ router.get("/:postId", isLoggedIn, async (req, res, next) => {
   }
 });
 
+// router.delete("/:postId", isLoggedIn, async (req, res, next) => {
+//   try {
+//     const delPost = await Post.findOne({
+//       where: {
+//         id: parseInt(req.params.postId),
+//         UserId: req.user.id,
+//       },
+//     });
+//     console.log("🚀__delPost", delPost);
+//     if (!delPost) {
+//       return res.status(404).send("게시물을 찾을 수 없습니다.");
+//     }
+//     await delPost.destroy();
+//     res.status(200).json({ PostId: parseInt(req.params.postId) });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send("게시물 삭제 중 에러가 발생했습니다.");
+//     next(error);
+//   }
+// });
 router.delete("/:postId", isLoggedIn, async (req, res, next) => {
+  const postId = parseInt(req.params.postId);
+  const userId = req.user.id;
+
   try {
-    await Post.destroy({
-      where: {
-        id: parseInt(req.params.postId),
-        UserId: req.user.id,
-      },
+    await sequelize.transaction(async (transaction) => {
+      // 댓글 삭제
+      await sequelize.query(`DELETE FROM comments WHERE PostId = ${postId}`, {
+        transaction,
+      });
+
+      // 게시물 삭제
+      await sequelize.query(
+        `DELETE FROM posts WHERE id = ${postId} AND UserId = ${userId}`,
+        { transaction }
+      );
     });
-    res.status(200).json({ PostId: parseInt(req.params.postId) });
+
+    res.status(200).json({ PostId: postId });
   } catch (error) {
     console.error(error);
+    res.status(500).send("게시물 삭제 중 에러가 발생했습니다.");
     next(error);
   }
 });
+
 router.put(
   "/:postId",
   isLoggedIn,

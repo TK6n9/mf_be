@@ -39,7 +39,7 @@ router.get("/room/:id", async (req, res) => {
     if (!room) {
       return res.status(404).json({ error: "Room not found" });
     }
-    // Add password and max occupancy logic as needed
+
     const chats = await Chat.findAll({
       where: { room: room.id },
       order: [["createdAt", "ASC"]],
@@ -58,6 +58,7 @@ router.delete("/room/:id", async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
+
 router.post("/room/:id/chat", async (req, res) => {
   try {
     const chat = await Chat.create({
@@ -65,6 +66,7 @@ router.post("/room/:id/chat", async (req, res) => {
       // user: req.session.color,
       chat: req.body.chat,
     });
+    console.log("🚀__room : req.params.id", req.params.id);
     req.app.get("io").of("/chat").to(req.params.id).emit("chat", chat);
     res.status(201).json(chat);
   } catch (error) {

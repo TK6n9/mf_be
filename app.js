@@ -6,14 +6,14 @@ const morgan = require("morgan");
 const session = require("express-session");
 const dotenv = require("dotenv");
 const http = require("http");
-const https = require("https");
+// const https = require("https");
 const fs = require("fs");
 
 const helmet = require("helmet");
 const hpp = require("hpp");
 const redis = require("redis");
 
-const RedisStore = require("connect-redis").default;
+// const RedisStore = require("connect-redis")(session);
 const socketIo = require("socket.io");
 const cors = require("cors");
 dotenv.config();
@@ -23,6 +23,7 @@ const redisClient = redis.createClient({
   password: process.env.REDIS_PASSWORD,
   legacyMode: true,
 });
+
 redisClient.connect().catch(console.error);
 
 const options = {
@@ -40,8 +41,8 @@ const { sequelize } = require("./models");
 const passportConfig = require("./passport");
 
 const app = express();
-// const server = http.createServer(app);
-const server = https.createServer(options, app);
+const server = http.createServer(app);
+// const server = https.createServer(options, app);
 
 const corsOptions = {
   origin: "http://localhost:3000" || "https://tk-mindfulness.vercel.app",
@@ -94,7 +95,7 @@ app.use(
     saveUninitialized: false,
     resave: false,
     secret: process.env.COOKIE_SECRET,
-    store: new RedisStore({ client: redisClient }),
+    // store: new RedisStore({ client: redisClient }),
   })
 );
 
