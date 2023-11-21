@@ -13,8 +13,7 @@ const helmet = require("helmet");
 const hpp = require("hpp");
 const redis = require("redis");
 
-// const RedisStore = require("connect-redis")(session);
-const RedisStore = require("connect-redis").default;
+const RedisStore = require("connect-redis")(session);
 const socketIo = require("socket.io");
 const cors = require("cors");
 dotenv.config();
