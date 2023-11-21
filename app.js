@@ -14,6 +14,7 @@ const hpp = require("hpp");
 const redis = require("redis");
 
 // const RedisStore = require("connect-redis")(session);
+const RedisStore = require("connect-redis").default;
 const socketIo = require("socket.io");
 const cors = require("cors");
 dotenv.config();
@@ -99,7 +100,7 @@ app.use(
     saveUninitialized: false,
     resave: false,
     secret: process.env.COOKIE_SECRET,
-    // store: new RedisStore({ client: redisClient }),
+    store: new RedisStore({ client: redisClient }),
   })
 );
 
