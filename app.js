@@ -45,7 +45,11 @@ const server = http.createServer(app);
 // const server = https.createServer(options, app);
 
 const corsOptions = {
-  origin: ["http://localhost:3000", "http://43.201.234.99"],
+  origin: [
+    "http://localhost:3000",
+    "http://43.201.234.99",
+    "http://www.cog-mind.com",
+  ],
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
   // 쿠키 전송을 위해 필요
