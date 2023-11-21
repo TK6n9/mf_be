@@ -4,7 +4,7 @@
   "description": "mindfulness API 서버",
   "main": "app.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=production PORT=80 pm2 start app.js -i 0",
+    "start": "cross-env NODE_ENV=production PORT=8080 pm2 start app.js -i 0",
     "dev": "nodemon server",
     "test": "jest"
   },
