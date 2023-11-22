@@ -8,23 +8,20 @@ const dotenv = require("dotenv");
 const http = require("http");
 // const https = require("https");
 const fs = require("fs");
-
 const helmet = require("helmet");
 const hpp = require("hpp");
-const redis = require("redis");
-
 const RedisStore = require("connect-redis")(session);
+const redis = require("redis");
 const socketIo = require("socket.io");
 const cors = require("cors");
 dotenv.config();
 
 const redisClient = redis.createClient({
-  url: `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`,
+  host: process.env.REDIS_HOST,
+  port: process.env.REDIS_PORT,
   password: process.env.REDIS_PASSWORD,
-  // legacyMode: true,
+  logErrors: true,
 });
-
-redisClient.connect().catch(console.error);
 
 const options = {
   key: fs.readFileSync("./rootca.key"),
