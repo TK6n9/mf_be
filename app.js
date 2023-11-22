@@ -21,7 +21,7 @@ dotenv.config();
 const redisClient = redis.createClient({
   url: `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`,
   password: process.env.REDIS_PASSWORD,
-  legacyMode: true,
+  // legacyMode: true,
 });
 
 redisClient.connect().catch(console.error);
@@ -99,6 +99,10 @@ app.use(
     saveUninitialized: false,
     resave: false,
     secret: process.env.COOKIE_SECRET,
+    cookie: {
+      httpOnly: true,
+      secure: false,
+    },
     store: new RedisStore({ client: redisClient }),
   })
 );
