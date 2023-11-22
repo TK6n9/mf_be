@@ -105,11 +105,8 @@ app.use(express.urlencoded({ extended: true })); // 간단한 객체만 허용 t
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.set("io", io);
 
-// app.use();
-
-app.use(passport.initialize());
 app.use(
-  passport.session({
+  session({
     saveUninitialized: false,
     resave: false,
     secret: process.env.COOKIE_SECRET,
@@ -120,6 +117,9 @@ app.use(
     store: new RedisStore({ client: redisClient, prefix: "session:" }),
   })
 );
+
+app.use(passport.initialize());
+app.use(passport.session());
 //이미지서버에 접근하게 위에있는데 이상함
 
 app.use("/uploads", express.static("uploads"));
